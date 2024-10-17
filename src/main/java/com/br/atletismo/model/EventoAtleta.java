@@ -8,7 +8,7 @@ import lombok.Data;
 public class EventoAtleta {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "atleta_id", nullable = false)

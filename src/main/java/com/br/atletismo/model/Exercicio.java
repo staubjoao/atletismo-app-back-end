@@ -11,7 +11,7 @@ import java.util.List;
 public class Exercicio {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     private int indice;
     private String descricao;

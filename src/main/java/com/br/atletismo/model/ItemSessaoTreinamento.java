@@ -8,7 +8,7 @@ import lombok.Data;
 public class ItemSessaoTreinamento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "exercicio_id", nullable = false)

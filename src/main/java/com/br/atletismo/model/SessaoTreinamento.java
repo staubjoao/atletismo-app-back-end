@@ -11,7 +11,7 @@ import java.util.List;
 public class SessaoTreinamento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     private LocalDateTime data;
     private boolean completada;
