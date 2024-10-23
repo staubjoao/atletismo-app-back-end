@@ -14,7 +14,7 @@ public class Clube {
 
     private String nome;
 
-    @Column(unique = true, length = 4)
+    @Column(unique = true, length = 5)
     private String codigo;
 
     @ManyToMany(mappedBy = "clubes")
