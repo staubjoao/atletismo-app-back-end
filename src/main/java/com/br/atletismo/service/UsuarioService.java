@@ -1,5 +1,8 @@
 package com.br.atletismo.service;
 
+import com.br.atletismo.config.SecurityConfiguration;
+import com.br.atletismo.dto.LoginDTO;
+import com.br.atletismo.dto.RecoveryJwtTokenDTO;
 import com.br.atletismo.dto.UsuarioDTO;
 import com.br.atletismo.model.Atleta;
 import com.br.atletismo.model.Clube;
@@ -7,7 +10,12 @@ import com.br.atletismo.model.Treinador;
 import com.br.atletismo.model.Usuario;
 import com.br.atletismo.repository.ClubeRepository;
 import com.br.atletismo.repository.UsuarioRepository;
+import com.br.atletismo.security.JwtTokenService;
+import com.br.atletismo.security.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -27,14 +35,23 @@ public class UsuarioService {
     private ClubeRepository clubeRepository;
 
     @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
+    private AuthenticationManager authenticationManager;
 
-    public List<Usuario> findAll() {
-        return usuarioRepository.findAll();
-    }
+    @Autowired
+    private JwtTokenService jwtTokenService;
 
-    public Optional<Usuario> findById(Long id) {
-        return usuarioRepository.findById(id);
+    @Autowired
+    private SecurityConfiguration securityConfiguration;
+
+    public RecoveryJwtTokenDTO authenticateUser(LoginDTO loginDTO) {
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
+                new UsernamePasswordAuthenticationToken(loginDTO.email(), loginDTO.senha());
+
+        Authentication authentication = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
+
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+
+        return new RecoveryJwtTokenDTO(jwtTokenService.generateToken(userDetails));
     }
 
     public Usuario save(UsuarioDTO usuarioDTO) {
@@ -50,7 +67,7 @@ public class UsuarioService {
 
         usuario.setNome(usuarioDTO.nome());
         usuario.setEmail(usuarioDTO.email());
-        usuario.setSenha(passwordEncoder.encode(usuarioDTO.senha()));
+        usuario.setSenha(securityConfiguration.passwordEncoder().encode(usuarioDTO.senha()));
         usuario.setFuncao(usuarioDTO.funcao());
 
         return usuarioRepository.save(usuario);
@@ -70,6 +87,14 @@ public class UsuarioService {
 
     public void deleteById(Long id) {
         usuarioRepository.deleteById(id);
+    }
+
+    public List<Usuario> findAll() {
+        return usuarioRepository.findAll();
+    }
+
+    public Optional<Usuario> findById(Long id) {
+        return usuarioRepository.findById(id);
     }
 
 }
