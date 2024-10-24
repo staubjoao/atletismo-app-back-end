@@ -31,9 +31,5 @@ public class UsuarioController {
         }
     }
 
-    @GetMapping("/atleta")
-    public ResponseEntity<List<Atleta>> listAtletas() {
-
-    }
 }
 
