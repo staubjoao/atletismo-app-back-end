@@ -1,6 +1,7 @@
 package com.br.atletismo.model;
 
 import com.br.atletismo.model.enums.FuncaoUsuario;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -29,6 +30,7 @@ public abstract class Usuario {
             joinColumns = @JoinColumn(name = "usuario_id"),
             inverseJoinColumns = @JoinColumn(name = "clube_id")
     )
+    @JsonIgnore
     private List<Clube> clubes;
 
 }

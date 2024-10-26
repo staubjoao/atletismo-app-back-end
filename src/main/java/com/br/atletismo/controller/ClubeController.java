@@ -16,12 +16,12 @@ public class ClubeController {
     private ClubeService clubeService;
 
     @PostMapping
-    public ResponseEntity<Clube> createClube(@RequestBody ClubeDTO clubeDTO) {
+    public ResponseEntity<?> createClube(@RequestBody ClubeDTO clubeDTO) {
         try {
             Clube clubeResposta = clubeService.save(clubeDTO);
             return ResponseEntity.ok(clubeResposta);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 }
