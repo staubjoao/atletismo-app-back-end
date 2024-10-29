@@ -50,7 +50,11 @@ public class UsuarioService {
 
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
-        return new RecoveryJwtTokenDTO(jwtTokenService.generateToken(userDetails));
+        String token = jwtTokenService.generateToken(userDetails);
+        String funcao = userDetails.getUsuario().getFuncao().toString();
+        String usuarioId = userDetails.getUsuario().getId().toString();
+
+        return new RecoveryJwtTokenDTO(token, funcao, usuarioId);
     }
 
     public Usuario save(UsuarioDTO usuarioDTO) {
