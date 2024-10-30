@@ -21,35 +21,30 @@ public class SecurityConfiguration {
     @Autowired
     private UserAuthenticationFilter userAuthenticationFilter;
 
-    public static final String [] ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED = {
+    public static final String[] ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED = {
             "/usuario/login", // Url que usaremos para fazer login
-            "/usuario" // Url que usaremos para criar um usuário
+            "/usuario", // Url que usaremos para criar um usuário
+            "/usuario/clube/*" // Permite acesso ao endpoint /usuario/{codigoClube} sem autenticação
     };
 
-    public static final String [] ENDPOINTS_WITH_AUTHENTICATION_REQUIRED = {
-            "/api/*"
-    };
-
-    public static final String [] ENDPOINTS_CUSTOMER = {
-            "/users/test/customer"
-    };
-
-    public static final String [] ENDPOINTS_ADMIN = {
-            "/users/test/administrator"
+    public static final String[] ENDPOINTS_WITH_AUTHENTICATION_REQUIRED = {
+            "/api/*" // Outros endpoints que requerem autenticação
     };
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        return httpSecurity.csrf().disable() // Desativa a proteção contra CSRF
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Configura a política de criação de sessão como stateless
-                .and().authorizeHttpRequests() // Habilita a autorização para as requisições HTTP
+        return httpSecurity
+                .cors() // Habilita o CORS configurado acima
+                .and()
+                .csrf().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .authorizeHttpRequests()
                 .requestMatchers(ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED).permitAll()
                 .requestMatchers(ENDPOINTS_WITH_AUTHENTICATION_REQUIRED).authenticated()
-                .requestMatchers(ENDPOINTS_ADMIN).hasRole("ADMINISTRATOR") // Repare que não é necessário colocar "ROLE" antes do nome, como fizemos na definição das roles
-                .requestMatchers(ENDPOINTS_CUSTOMER).hasRole("CUSTOMER")
                 .anyRequest().denyAll()
-                // Adiciona o filtro de autenticação de usuário que criamos, antes do filtro de segurança padrão do Spring Security
-                .and().addFilterBefore(userAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .and()
+                .addFilterBefore(userAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
@@ -62,5 +57,4 @@ public class SecurityConfiguration {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 }

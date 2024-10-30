@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 @Service
 public class ClubeService {
@@ -53,6 +54,15 @@ public class ClubeService {
         usuarioRepository.save(usuario);
 
         return clube;
+    }
+
+    public List<Clube> findClubesByAuthenticatedUser() {
+        String email = AuthenticatedUserUtil.getAuthenticatedUsername();
+
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        return usuario.getClubes().stream().collect(Collectors.toList());
     }
 
     public void deleteById(Long id) {

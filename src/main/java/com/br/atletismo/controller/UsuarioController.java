@@ -33,6 +33,16 @@ public class UsuarioController {
         }
     }
 
+    @PostMapping("/clube/{codigoClube}")
+    public ResponseEntity<Usuario> createUsuario(@RequestBody UsuarioDTO usuarioDTO, @PathVariable String codigoClube) {
+        try {
+            Usuario usuarioResposta = usuarioService.saveComClube(usuarioDTO, codigoClube);
+            return ResponseEntity.ok(usuarioResposta);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
     @PostMapping("/login")
     public ResponseEntity<RecoveryJwtTokenDTO> login(@RequestBody LoginDTO loginDTO) {
         try {

@@ -18,6 +18,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -74,6 +75,35 @@ public class UsuarioService {
         usuario.setFuncao(usuarioDTO.funcao());
 
         return usuarioRepository.save(usuario);
+    }
+
+    public Usuario saveComClube(UsuarioDTO usuarioDTO, String codigoClube) {
+        Usuario usuario;
+
+        Clube clube = clubeRepository.findByCodigo(codigoClube).get();
+
+        List<Clube> clubes = new ArrayList<>();
+        clubes.add(clube);
+        if (usuarioDTO.funcao() == ATLETA) {
+            usuario = new Atleta();
+        } else if (usuarioDTO.funcao() == TREINADOR) {
+            usuario = new Treinador();
+        } else {
+            throw new IllegalArgumentException("Função de usuário desconhecida");
+        }
+
+        usuario.setNome(usuarioDTO.nome());
+        usuario.setEmail(usuarioDTO.email());
+        usuario.setSenha(securityConfiguration.passwordEncoder().encode(usuarioDTO.senha()));
+        usuario.setFuncao(usuarioDTO.funcao());
+        usuario.setClubes(clubes);
+        Usuario usuario1 = usuarioRepository.save(usuario);
+        List<Usuario> usuarios = clube.getUsuarios();
+        usuarios.add(usuario1);
+        clube.setUsuarios(usuarios);
+
+        return usuario1;
+
     }
 
     public Usuario adicionarClubeAoUsuario(Long usuarioId, String codigoClube) {
