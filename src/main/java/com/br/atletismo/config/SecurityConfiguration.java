@@ -28,7 +28,8 @@ public class SecurityConfiguration {
     };
 
     public static final String[] ENDPOINTS_WITH_AUTHENTICATION_REQUIRED = {
-            "/api/*" // Outros endpoints que requerem autenticação
+            "/api/*",
+            "/api/clube/*",
     };
 
     @Bean

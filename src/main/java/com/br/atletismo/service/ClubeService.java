@@ -6,6 +6,7 @@ import com.br.atletismo.model.Usuario;
 import com.br.atletismo.repository.ClubeRepository;
 import com.br.atletismo.repository.UsuarioRepository;
 import com.br.atletismo.security.AuthenticatedUserUtil;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -56,6 +57,12 @@ public class ClubeService {
         return clube;
     }
 
+    public Clube update(ClubeDTO clubeDTO, Long idClube) {
+        Clube clube = clubeRepository.findById(idClube).get();
+        clube.setNome(clubeDTO.nome());
+        return clubeRepository.save(clube);
+    }
+
     public List<Clube> findClubesByAuthenticatedUser() {
         String email = AuthenticatedUserUtil.getAuthenticatedUsername();
 
@@ -65,8 +72,17 @@ public class ClubeService {
         return usuario.getClubes().stream().collect(Collectors.toList());
     }
 
-    public void deleteById(Long id) {
-        clubeRepository.deleteById(id);
+    @Transactional
+    public void deleteClub(Long clubeId) {
+        Clube clube = clubeRepository.findById(clubeId)
+                .orElseThrow(() -> new RuntimeException("Clube não encontrado"));
+
+        for (Usuario usuario : clube.getUsuarios()) {
+            usuario.getClubes().remove(clube);
+            usuarioRepository.save(usuario);
+        }
+
+        clubeRepository.delete(clube);
     }
 
     private String gerarCodigoUnico() {

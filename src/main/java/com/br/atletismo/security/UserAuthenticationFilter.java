@@ -60,12 +60,7 @@ public class UserAuthenticationFilter extends OncePerRequestFilter {
 
         for (String endpoint : SecurityConfiguration.ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED) {
             // Se o endpoint contém um parâmetro de path, utilize a expressão regular
-            if (endpoint.contains("{")) {
-                String regex = endpoint.replaceAll("\\{[^/]*\\}", "[^/]*");
-                if (requestURI.matches(regex)) {
-                    return false; // O endpoint é público
-                }
-            } else if (requestURI.equals(endpoint)) {
+            if (requestURI.contains(endpoint)) {
                 return false; // O endpoint é público
             }
         }

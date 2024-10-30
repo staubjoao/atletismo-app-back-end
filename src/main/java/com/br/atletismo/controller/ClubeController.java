@@ -1,6 +1,7 @@
 package com.br.atletismo.controller;
 
 import com.br.atletismo.dto.ClubeDTO;
+import com.br.atletismo.dto.RespostaTextoDTO;
 import com.br.atletismo.model.Clube;
 import com.br.atletismo.service.ClubeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,5 +37,26 @@ public class ClubeController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @PutMapping("/{idClube}")
+    public ResponseEntity<?> updateClube(@RequestBody ClubeDTO clubeDTO, @PathVariable Long idClube) {
+        try {
+            Clube clubeResposta = clubeService.update(clubeDTO, idClube);
+            return ResponseEntity.ok(clubeResposta);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/{idClube}")
+    public ResponseEntity<?> deleteClube(@PathVariable Long idClube) {
+        try {
+            clubeService.deleteClub(idClube);
+            return ResponseEntity.ok(new RespostaTextoDTO("Deletado com sucesso!"));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
 }
 
