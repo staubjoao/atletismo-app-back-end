@@ -19,6 +19,7 @@ public abstract class Usuario {
 
     private String nome;
     private String email;
+    @JsonIgnore
     private String senha;
 
     @Enumerated(EnumType.STRING)

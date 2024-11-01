@@ -1,5 +1,6 @@
 package com.br.atletismo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -21,5 +22,6 @@ public class Clube {
     private List<Usuario> usuarios;
 
     @OneToMany(mappedBy = "clube")
+    @JsonIgnore
     private List<Evento> eventos;
 }

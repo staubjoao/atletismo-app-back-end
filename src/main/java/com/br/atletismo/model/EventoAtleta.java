@@ -19,5 +19,5 @@ public class EventoAtleta {
     private Evento evento;
 
     @Column(unique = true)
-    private String relacaoUnica; // Substitui o @@unique do Prisma
+    private String relacaoUnica;
 }
