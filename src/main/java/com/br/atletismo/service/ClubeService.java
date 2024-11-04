@@ -1,6 +1,7 @@
 package com.br.atletismo.service;
 
 import com.br.atletismo.dto.ClubeDTO;
+import com.br.atletismo.dto.ClubeRetornoDTO;
 import com.br.atletismo.model.Clube;
 import com.br.atletismo.model.Usuario;
 import com.br.atletismo.repository.ClubeRepository;
@@ -70,6 +71,25 @@ public class ClubeService {
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
         return usuario.getClubes().stream().collect(Collectors.toList());
+    }
+
+    public List<ClubeRetornoDTO> findClubesByAuthenticatedUserComMembros() {
+        String email = AuthenticatedUserUtil.getAuthenticatedUsername();
+
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+
+
+        List<Clube> clubeList = usuario.getClubes().stream().collect(Collectors.toList());
+
+        List<ClubeRetornoDTO> retornoDTOList = new ArrayList<>();
+
+        for (Clube clube : clubeList) {
+            ClubeRetornoDTO clubeRetornoDTO = new ClubeRetornoDTO(clube.getNome(), clube.getCodigo(), clube.getUsuarios().size());
+            retornoDTOList.add(clubeRetornoDTO);
+        }
+        return retornoDTOList;
     }
 
     @Transactional

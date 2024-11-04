@@ -1,6 +1,7 @@
 package com.br.atletismo.controller;
 
 import com.br.atletismo.dto.ClubeDTO;
+import com.br.atletismo.dto.ClubeRetornoDTO;
 import com.br.atletismo.dto.RespostaTextoDTO;
 import com.br.atletismo.model.Clube;
 import com.br.atletismo.service.ClubeService;
@@ -32,6 +33,16 @@ public class ClubeController {
     public ResponseEntity<?> getAllClube() {
         try {
             List<Clube> clubeResposta = clubeService.findClubesByAuthenticatedUser();
+            return ResponseEntity.ok(clubeResposta);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/membros")
+    public ResponseEntity<?> getAllClubeComMembros() {
+        try {
+            List<ClubeRetornoDTO> clubeResposta = clubeService.findClubesByAuthenticatedUserComMembros();
             return ResponseEntity.ok(clubeResposta);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());

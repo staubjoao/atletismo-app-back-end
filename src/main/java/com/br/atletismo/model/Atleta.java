@@ -1,5 +1,6 @@
 package com.br.atletismo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -13,7 +14,12 @@ public class Atleta extends Usuario {
     @OneToMany(mappedBy = "atleta")
     private List<SessaoTreinamento> sessoesTreinamento;
 
-    @OneToMany(mappedBy = "atleta")
-    private List<EventoAtleta> eventosAtleta;
+    @ManyToMany
+    @JoinTable(
+            name = "evento_atleta",
+            joinColumns = @JoinColumn(name = "evento_id"),
+            inverseJoinColumns = @JoinColumn(name = "usuario_id")
+    )
+    private List<Evento> eventos;
 
 }

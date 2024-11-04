@@ -25,6 +25,4 @@ public class Evento {
     @OneToMany(mappedBy = "evento")
     private List<HorarioTreinamento> horarios;
 
-    @OneToMany(mappedBy = "evento")
-    private List<EventoAtleta> eventosAtleta;
 }

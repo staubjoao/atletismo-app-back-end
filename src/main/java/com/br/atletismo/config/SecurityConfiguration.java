@@ -22,15 +22,17 @@ public class SecurityConfiguration {
     private UserAuthenticationFilter userAuthenticationFilter;
 
     public static final String[] ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED = {
-            "/usuario/login", // Url que usaremos para fazer login
-            "/usuario", // Url que usaremos para criar um usuário
-            "/usuario/clube/*" // Permite acesso ao endpoint /usuario/{codigoClube} sem autenticação
+            "/auth/login",
+            "/auth",
+            "/auth/clube/*"
     };
 
     public static final String[] ENDPOINTS_WITH_AUTHENTICATION_REQUIRED = {
             "/api/*",
             "/api/clube/*",
             "/api/evento/*",
+            "/api/usuario/*",
+            "/api/usuario/clube/*",
     };
 
     @Bean

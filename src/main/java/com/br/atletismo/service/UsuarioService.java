@@ -10,6 +10,7 @@ import com.br.atletismo.model.Treinador;
 import com.br.atletismo.model.Usuario;
 import com.br.atletismo.repository.ClubeRepository;
 import com.br.atletismo.repository.UsuarioRepository;
+import com.br.atletismo.security.AuthenticatedUserUtil;
 import com.br.atletismo.security.JwtTokenService;
 import com.br.atletismo.security.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.br.atletismo.model.enums.FuncaoUsuario.ATLETA;
 import static com.br.atletismo.model.enums.FuncaoUsuario.TREINADOR;
@@ -126,8 +128,9 @@ public class UsuarioService {
         return usuarioRepository.findAll();
     }
 
-    public Optional<Usuario> findById(Long id) {
-        return usuarioRepository.findById(id);
+    public List<Usuario> findByClube(String codigoClube) {
+        Clube clube = clubeRepository.findByCodigo(codigoClube).get();
+        return clube.getUsuarios();
     }
 
 }
