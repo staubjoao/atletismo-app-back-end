@@ -2,12 +2,16 @@ package com.br.atletismo.model;
 
 import com.br.atletismo.model.enums.TipoExercicio;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Data
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 public class Exercicio {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,6 +27,4 @@ public class Exercicio {
     @JoinColumn(name = "horario_id", nullable = false)
     private HorarioTreinamento horario;
 
-    @OneToMany(mappedBy = "exercicio")
-    private List<ItemSessaoTreinamento> itensSessao;
 }

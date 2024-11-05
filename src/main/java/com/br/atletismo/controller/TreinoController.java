@@ -20,10 +20,10 @@ public class TreinoController {
     @PostMapping
     public ResponseEntity<?> uploadTrainingSchedule(@RequestBody List<HorarioTreinamentoDTO> horarioTreinamentoDTOList) {
         try {
-            System.out.println(horarioTreinamentoDTOList);
+            treinoService.salvarTreino(horarioTreinamentoDTOList);
             return ResponseEntity.ok(null);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 }
