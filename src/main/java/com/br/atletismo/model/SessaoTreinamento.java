@@ -21,10 +21,4 @@ public class SessaoTreinamento {
     @JoinColumn(name = "atleta_id", nullable = false)
     private Atleta atleta;
 
-    @ManyToOne
-    @JoinColumn(name = "horario_id", nullable = false)
-    private HorarioTreinamento horario;
-
-    @OneToMany(mappedBy = "sessao")
-    private List<ItemSessaoTreinamento> itens;
 }

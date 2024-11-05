@@ -5,5 +5,7 @@ public enum TipoExercicio {
     FORCA,
     RESISTENCIA,
     VELOCIDADE,
-    TECNICA
+    TECNICA,
+    ACADEMIA,
+    DESCANSO
 }

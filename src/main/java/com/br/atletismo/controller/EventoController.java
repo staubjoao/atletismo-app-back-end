@@ -48,4 +48,10 @@ public class EventoController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @GetMapping("/clube/{clubeId}")
+    public ResponseEntity<?> getEventoByClube(@PathVariable Long clubeId) {
+        List<Evento> eventos = eventoService.findAllEventosByClube(clubeId);
+        return ResponseEntity.ok(eventos);
+    }
 }

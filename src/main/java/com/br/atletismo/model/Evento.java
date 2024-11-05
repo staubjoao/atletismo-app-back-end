@@ -1,6 +1,7 @@
 package com.br.atletismo.model;
 
 import com.br.atletismo.model.enums.TipoEvento;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -20,6 +21,7 @@ public class Evento {
 
     @ManyToOne
     @JoinColumn(name = "clube_id", nullable = false)
+    @JsonIgnore
     private Clube clube;
 
     @OneToMany(mappedBy = "evento")

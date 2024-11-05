@@ -24,15 +24,18 @@ public class SecurityConfiguration {
     public static final String[] ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED = {
             "/auth/login",
             "/auth",
-            "/auth/clube/*"
+            "/auth/clube/*",
     };
 
     public static final String[] ENDPOINTS_WITH_AUTHENTICATION_REQUIRED = {
             "/api/*",
             "/api/clube/*",
             "/api/evento/*",
+            "/api/evento/clube/*",
             "/api/usuario/*",
             "/api/usuario/clube/*",
+            "/api/treino",
+            "/api/treino/*",
     };
 
     @Bean

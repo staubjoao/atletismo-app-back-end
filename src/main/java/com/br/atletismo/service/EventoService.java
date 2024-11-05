@@ -75,4 +75,9 @@ public class EventoService {
         eventoRepository.deleteById(id);
     }
 
+    public List<Evento> findAllEventosByClube(Long clubeId) {
+        Clube clube = clubeRepository.findById(clubeId).get();
+        return clube.getEventos();
+    }
+
 }
