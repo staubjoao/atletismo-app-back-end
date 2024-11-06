@@ -19,13 +19,9 @@ public class HorarioTreinamento {
 
     private int diaSemana;
     private LocalDate dataTreinamento;
-    private String descricao;
 
     @ManyToOne
     @JoinColumn(name = "evento_id", nullable = false)
     private Evento evento;
-
-    @OneToMany(mappedBy = "horario")
-    private List<Exercicio> exercicios;
 
 }

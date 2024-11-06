@@ -37,23 +37,29 @@ public class ClubeService {
     public Clube save(ClubeDTO clubeDTO) {
         String email = AuthenticatedUserUtil.getAuthenticatedUsername();
 
+        // Criando o clube a partir do DTO
         Clube clube = new Clube();
         clube.setNome(clubeDTO.nome());
         String codigoClube = gerarCodigoUnico();
         clube.setCodigo(codigoClube);
 
+        // Salvando o clube para garantir que ele tenha um ID
+        clube = clubeRepository.save(clube);
+
+        // Encontrando o usuário autenticado
         Usuario usuario = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
+        // Salvando o usuario para garantir que ele tenha um ID
+        usuario = usuarioRepository.save(usuario);
+
+        // Associando o clube ao usuario e vice-versa
         usuario.getClubes().add(clube);
+        clube.addUsuario(usuario);
 
-        List<Usuario> usuarios = new ArrayList<>();
-        usuarios.add(usuario);
-        clube.setUsuarios(usuarios);
-
-        clubeRepository.save(clube);
-
+        // Salvando ambos novamente para atualizar a tabela de associação
         usuarioRepository.save(usuario);
+        clubeRepository.save(clube);
 
         return clube;
     }

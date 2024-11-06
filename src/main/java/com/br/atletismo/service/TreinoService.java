@@ -54,9 +54,7 @@ public class TreinoService {
                     null,
                     horarioTreinamentoDTO.diaSemana(),
                     horarioTreinamentoDTO.dataTreinamento(),
-                    horarioTreinamentoDTO.descricao(),
-                    eventoTreino,
-                    exerciciosList);
+                    eventoTreino);
 
             HorarioTreinamento horarioTreinamentoRetorno = horarioTreinamentoRepository.save(horarioTreinamento);
             for (Exercicio exercicio : exerciciosList) {

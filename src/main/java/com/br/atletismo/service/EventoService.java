@@ -56,12 +56,13 @@ public class EventoService {
 
         List<Clube> clubeList = usuario.getClubes();
 
-        List<Evento> eventos = new ArrayList<>();
+        List<Evento> eventosRetorno = new ArrayList<>();
         for (Clube clube : clubeList) {
-            eventos.addAll(clube.getEventos());
+            List<Evento> eventos = eventoRepository.findByClube(clube);
+            eventosRetorno.addAll(eventos);
         }
 
-        return eventos;
+        return eventosRetorno;
     }
 
     public Evento update(EventoDTO eventoDTO, Long idEvento) {
@@ -77,7 +78,7 @@ public class EventoService {
 
     public List<Evento> findAllEventosByClube(Long clubeId) {
         Clube clube = clubeRepository.findById(clubeId).get();
-        return clube.getEventos();
+        return eventoRepository.findByClube(clube);
     }
 
 }

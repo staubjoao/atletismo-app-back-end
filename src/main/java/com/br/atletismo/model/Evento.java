@@ -21,10 +21,6 @@ public class Evento {
 
     @ManyToOne
     @JoinColumn(name = "clube_id", nullable = false)
-    @JsonIgnore
     private Clube clube;
-
-    @OneToMany(mappedBy = "evento")
-    private List<HorarioTreinamento> horarios;
 
 }

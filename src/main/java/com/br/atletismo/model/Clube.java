@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -21,7 +22,12 @@ public class Clube {
     @ManyToMany(mappedBy = "clubes")
     private List<Usuario> usuarios;
 
-    @OneToMany(mappedBy = "clube")
-    @JsonIgnore
-    private List<Evento> eventos;
+    public Clube() {
+        this.usuarios = new ArrayList<>();
+    }
+
+    public void addUsuario(Usuario usuario) {
+        this.usuarios.add(usuario);
+    }
+
 }
