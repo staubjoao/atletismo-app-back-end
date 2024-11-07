@@ -23,4 +23,8 @@ public class Evento {
     @JoinColumn(name = "clube_id", nullable = false)
     private Clube clube;
 
+    @ManyToMany(mappedBy = "eventos")
+    @JsonIgnore
+    private List<Atleta> atletas;
+
 }

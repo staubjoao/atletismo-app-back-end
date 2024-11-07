@@ -2,6 +2,8 @@ package com.br.atletismo.service;
 
 import com.br.atletismo.dto.ClubeDTO;
 import com.br.atletismo.dto.EventoDTO;
+import com.br.atletismo.dto.EventoRetornoDTO;
+import com.br.atletismo.model.Atleta;
 import com.br.atletismo.model.Clube;
 import com.br.atletismo.model.Evento;
 import com.br.atletismo.model.Usuario;
@@ -56,13 +58,7 @@ public class EventoService {
 
         List<Clube> clubeList = usuario.getClubes();
 
-        List<Evento> eventosRetorno = new ArrayList<>();
-        for (Clube clube : clubeList) {
-            List<Evento> eventos = eventoRepository.findByClube(clube);
-            eventosRetorno.addAll(eventos);
-        }
-
-        return eventosRetorno;
+        return eventoRepository.findByClubeIn(clubeList);
     }
 
     public Evento update(EventoDTO eventoDTO, Long idEvento) {
@@ -79,6 +75,72 @@ public class EventoService {
     public List<Evento> findAllEventosByClube(Long clubeId) {
         Clube clube = clubeRepository.findById(clubeId).get();
         return eventoRepository.findByClube(clube);
+    }
+
+    public void vincularEventoAtleta(Long eventoId) {
+        Evento evento = eventoRepository.findById(eventoId).get();
+        String email = AuthenticatedUserUtil.getAuthenticatedUsername();
+
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        Atleta atleta = new Atleta(usuario);
+
+        List<Evento> eventoList = eventoRepository.findEventosByAtletaId(atleta.getId());
+        if(!eventoList.contains(evento)) {
+            eventoList.add(evento);
+        }
+        atleta.setEventos(eventoList);
+        usuarioRepository.save(atleta);
+    }
+
+    public void desvincularEventoAtleta(Long eventoId) {
+        Evento evento = eventoRepository.findById(eventoId)
+                .orElseThrow(() -> new RuntimeException("Evento não encontrado"));
+
+        String email = AuthenticatedUserUtil.getAuthenticatedUsername();
+
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        Atleta atleta = new Atleta(usuario);
+
+        List<Evento> eventoList = eventoRepository.findEventosByAtletaId(atleta.getId());
+
+        if (eventoList.contains(evento)) {
+            eventoList.remove(evento);
+        }
+
+        atleta.setEventos(eventoList);
+
+        usuarioRepository.save(atleta);
+
+        evento.getAtletas().remove(atleta);
+        eventoRepository.save(evento);
+    }
+
+
+    public List<EventoRetornoDTO> getAllEventoAtleta() {
+        String email = AuthenticatedUserUtil.getAuthenticatedUsername();
+
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        Atleta atleta = new Atleta(usuario);
+        atleta.setEventos(eventoRepository.findEventosByAtletaId(atleta.getId()));
+
+        List<Clube> clubes = atleta.getClubes();
+
+        List<Evento> eventosDosClubes = eventoRepository.findByClubeIn(clubes);
+
+        List<EventoRetornoDTO> eventoRetornoDTOs = new ArrayList<>();
+        for (Evento evento : eventosDosClubes) {
+            boolean vinculado = atleta.getEventos() != null && atleta.getEventos().contains(evento);
+            EventoRetornoDTO dto = new EventoRetornoDTO(evento.getClube(), evento.getId(), evento.getNome(), evento.getTipo(), vinculado);
+            eventoRetornoDTOs.add(dto);
+        }
+
+        return eventoRetornoDTOs;
     }
 
 }
