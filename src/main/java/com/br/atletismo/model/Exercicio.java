@@ -1,6 +1,7 @@
 package com.br.atletismo.model;
 
 import com.br.atletismo.model.enums.TipoExercicio;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,6 +26,7 @@ public class Exercicio {
 
     @ManyToOne
     @JoinColumn(name = "horario_id", nullable = false)
+    @JsonIgnore
     private HorarioTreinamento horario;
 
 }

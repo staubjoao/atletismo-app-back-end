@@ -36,6 +36,7 @@ public class SecurityConfiguration {
             "/api/usuario/clube/*",
             "/api/treino",
             "/api/treino/*",
+            "/api/treino/evento/*",
     };
 
     @Bean

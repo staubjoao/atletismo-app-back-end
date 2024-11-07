@@ -2,11 +2,9 @@ package com.br.atletismo.service;
 
 import com.br.atletismo.dto.treino.ExercicioDTO;
 import com.br.atletismo.dto.treino.HorarioTreinamentoDTO;
-import com.br.atletismo.model.Evento;
-import com.br.atletismo.model.Exercicio;
-import com.br.atletismo.model.HorarioTreinamento;
-import com.br.atletismo.repository.ExercicioRepository;
-import com.br.atletismo.repository.HorarioTreinamentoRepository;
+import com.br.atletismo.model.*;
+import com.br.atletismo.repository.*;
+import com.br.atletismo.security.AuthenticatedUserUtil;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +23,15 @@ public class TreinoService {
 
     @Autowired
     private EventoService eventoService;
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private ClubeRepository clubeRepository;
+
+    @Autowired
+    private EventoRepository eventoRepository;
 
     @Transactional
     public void salvarTreino(List<HorarioTreinamentoDTO> horarioTreinamentoDTOList) {
@@ -54,7 +61,8 @@ public class TreinoService {
                     null,
                     horarioTreinamentoDTO.diaSemana(),
                     horarioTreinamentoDTO.dataTreinamento(),
-                    eventoTreino);
+                    eventoTreino,
+                    null);
 
             HorarioTreinamento horarioTreinamentoRetorno = horarioTreinamentoRepository.save(horarioTreinamento);
             for (Exercicio exercicio : exerciciosList) {
@@ -62,6 +70,18 @@ public class TreinoService {
                 exercicioRepository.save(exercicio);
             }
         }
+    }
+
+    public List<HorarioTreinamento> getAllHorarioTreinamento() {
+        String email = AuthenticatedUserUtil.getAuthenticatedUsername();
+
+        return horarioTreinamentoRepository.findHorariosWithExerciciosByUsuarioEmail(email);
+    }
+
+    public List<HorarioTreinamento> getByEventoHorarioTreinamento(Long eventoId) {
+        String email = AuthenticatedUserUtil.getAuthenticatedUsername();
+
+        return horarioTreinamentoRepository.findHorariosWithExerciciosByUsuarioEmailAndEvento(email, eventoId);
     }
 
 }

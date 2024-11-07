@@ -1,5 +1,6 @@
 package com.br.atletismo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,5 +24,8 @@ public class HorarioTreinamento {
     @ManyToOne
     @JoinColumn(name = "evento_id", nullable = false)
     private Evento evento;
+
+    @OneToMany(mappedBy = "horario")
+    private List<Exercicio> exercicios;
 
 }
