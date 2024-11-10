@@ -133,4 +133,19 @@ public class UsuarioService {
         return clube.getUsuarios();
     }
 
+    public Usuario atualizaUsuario(UsuarioDTO usuarioDTO) {
+        String email = AuthenticatedUserUtil.getAuthenticatedUsername();
+
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        usuario.setEmail(usuarioDTO.email());
+        usuario.setNome(usuarioDTO.nome());
+        usuario.setSenha(securityConfiguration.passwordEncoder().encode(usuarioDTO.senha()));
+
+        usuario.setFuncao(usuarioDTO.funcao());
+
+        return usuarioRepository.save(usuario);
+    }
+
 }
