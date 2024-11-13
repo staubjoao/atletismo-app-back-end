@@ -69,5 +69,15 @@ public class ClubeController {
         }
     }
 
+    @PostMapping("/entrar/{codigoClube}")
+    public ResponseEntity<?> entrarClube(@PathVariable String codigoClube) {
+        try {
+            clubeService.entrarClube(codigoClube);
+            return ResponseEntity.ok("{\"message\":\"Sessão salva com sucesso!\"}");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
 }
 

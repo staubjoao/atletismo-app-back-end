@@ -1,5 +1,6 @@
 package com.br.atletismo.controller;
 
+import com.br.atletismo.dto.HorarioTreinamentoRetornoDTO;
 import com.br.atletismo.dto.treino.HorarioTreinamentoDTO;
 import com.br.atletismo.model.HorarioTreinamento;
 import com.br.atletismo.service.TreinoService;
@@ -38,7 +39,7 @@ public class TreinoController {
     }
 
     @GetMapping("/evento/{eventoId}")
-    public ResponseEntity<List<HorarioTreinamento>> getAllTreinoByEvento(@PathVariable Long eventoId) {
+    public ResponseEntity<List<HorarioTreinamentoRetornoDTO>> getAllTreinoByEvento(@PathVariable Long eventoId) {
         try {
             return ResponseEntity.ok(treinoService.getByEventoHorarioTreinamento(eventoId)) ;
         } catch (Exception e) {

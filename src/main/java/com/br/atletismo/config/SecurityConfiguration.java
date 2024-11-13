@@ -30,6 +30,7 @@ public class SecurityConfiguration {
     public static final String[] ENDPOINTS_WITH_AUTHENTICATION_REQUIRED = {
             "/api/*",
             "/api/clube/*",
+            "/api/clube/entrar/*",
             "/api/evento/*",
             "/api/evento/vincular/*",
             "/api/evento/desvincular/*",
@@ -40,6 +41,8 @@ public class SecurityConfiguration {
             "/api/treino",
             "/api/treino/*",
             "/api/treino/evento/*",
+            "/api/sessao-treino",
+            "/api/sessao-treino/*"
     };
 
     @Bean

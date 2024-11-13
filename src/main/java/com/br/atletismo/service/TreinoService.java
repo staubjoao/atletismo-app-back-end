@@ -1,5 +1,6 @@
 package com.br.atletismo.service;
 
+import com.br.atletismo.dto.HorarioTreinamentoRetornoDTO;
 import com.br.atletismo.dto.treino.ExercicioDTO;
 import com.br.atletismo.dto.treino.HorarioTreinamentoDTO;
 import com.br.atletismo.model.*;
@@ -78,10 +79,28 @@ public class TreinoService {
         return horarioTreinamentoRepository.findHorariosWithExerciciosByUsuarioEmail(email);
     }
 
-    public List<HorarioTreinamento> getByEventoHorarioTreinamento(Long eventoId) {
+    public List<HorarioTreinamentoRetornoDTO> getByEventoHorarioTreinamento(Long eventoId) {
         String email = AuthenticatedUserUtil.getAuthenticatedUsername();
 
-        return horarioTreinamentoRepository.findHorariosWithExerciciosByUsuarioEmailAndEvento(email, eventoId);
+        List<HorarioTreinamento> todosHorariosTreinamento =
+                horarioTreinamentoRepository.findHorariosWithExerciciosByUsuarioEmailAndEvento(email, eventoId);
+
+        List<HorarioTreinamento> horariosTreinamentoNaoRalizados =
+                horarioTreinamentoRepository.findHorariosWithoutSessaoByUsuarioEmailAndEvento(email, eventoId);
+
+        return todosHorariosTreinamento.stream()
+                .map(horario -> {
+                    boolean concluido = !horariosTreinamentoNaoRalizados.contains(horario);
+                    return new HorarioTreinamentoRetornoDTO(
+                            horario.getId(),
+                            horario.getDataTreinamento(),
+                            horario.getDiaSemana(),
+                            horario.getEvento(),
+                            horario.getExercicios(),
+                            concluido
+                    );
+                })
+                .toList();
     }
 
 }

@@ -30,4 +30,17 @@ public interface HorarioTreinamentoRepository extends JpaRepository<HorarioTrein
             @Param("email") String email,
             @Param("eventoId") Long eventoId);
 
+    @Query("SELECT DISTINCT h FROM HorarioTreinamento h " +
+            "JOIN FETCH h.evento ev " +
+            "JOIN FETCH h.exercicios e " +
+            "JOIN ev.clube c " +
+            "JOIN c.usuarios u " +
+            "LEFT JOIN SessaoTreinamento st ON st.horarioTreinamento = h " +
+            "WHERE u.email = :email " +
+            "AND ev.id = :eventoId " +
+            "AND st.id IS NULL")
+    List<HorarioTreinamento> findHorariosWithoutSessaoByUsuarioEmailAndEvento(
+            @Param("email") String email,
+            @Param("eventoId") Long eventoId);
+
 }

@@ -1,5 +1,6 @@
 package com.br.atletismo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -14,11 +15,18 @@ public class SessaoTreinamento {
     private Long id;
 
     private LocalDateTime data;
-    private boolean completada;
     private String feedback;
+    private boolean concluida;
 
     @ManyToOne
     @JoinColumn(name = "atleta_id", nullable = false)
+    @JsonIgnore
     private Atleta atleta;
 
+    @ManyToOne
+    private HorarioTreinamento horarioTreinamento;
+
+    @OneToMany(mappedBy = "sessao")
+    @JsonIgnore
+    private List<ItemSessaoTreinamento> itemSessaoTreinamentosList;
 }
