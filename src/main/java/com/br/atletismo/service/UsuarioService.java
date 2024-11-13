@@ -108,6 +108,12 @@ public class UsuarioService {
 
     }
 
+    public Usuario usuarioAutenticado() {
+        String email = AuthenticatedUserUtil.getAuthenticatedUsername();
+        return usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+    }
+
     public Usuario adicionarClubeAoUsuario(Long usuarioId, String codigoClube) {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado"));

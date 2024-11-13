@@ -20,6 +20,7 @@ public class Clube {
     private String codigo;
 
     @ManyToMany(mappedBy = "clubes")
+    @JsonIgnore
     private List<Usuario> usuarios;
 
     public Clube() {

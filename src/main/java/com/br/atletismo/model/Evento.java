@@ -21,7 +21,6 @@ public class Evento {
 
     @ManyToOne
     @JoinColumn(name = "clube_id", nullable = false)
-    @JsonIgnore
     private Clube clube;
 
     @ManyToMany(mappedBy = "eventos")
