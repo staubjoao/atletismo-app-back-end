@@ -1,8 +1,10 @@
 package com.br.atletismo.controller;
 
+import com.br.atletismo.dto.UsuarioDTO;
 import com.br.atletismo.model.Usuario;
 import com.br.atletismo.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,6 +24,15 @@ public class UsuarioController {
             return usuarios;
         } catch (Exception e) {
             return null;
+        }
+    }
+
+    @PutMapping
+    public ResponseEntity<?> atualizaUsuario(@RequestBody UsuarioDTO usuarioDTO) {
+        try {
+            return ResponseEntity.ok(usuarioService.atualizaUsuario(usuarioDTO));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
