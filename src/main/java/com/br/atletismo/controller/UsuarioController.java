@@ -1,5 +1,6 @@
 package com.br.atletismo.controller;
 
+import com.br.atletismo.dto.AlterarSenhaDTO;
 import com.br.atletismo.dto.UsuarioDTO;
 import com.br.atletismo.model.Usuario;
 import com.br.atletismo.service.UsuarioService;
@@ -27,7 +28,24 @@ public class UsuarioController {
         }
     }
 
-    @PutMapping
+    @PutMapping("/alterar-senha")
+    public ResponseEntity<?> alterarSenha(@RequestBody AlterarSenhaDTO alterarSenhaDTO) {
+        try {
+            usuarioService.atualizarSenha(alterarSenhaDTO.senhaAtual(), alterarSenhaDTO.novaSenha());
+            return ResponseEntity.ok("{\"message\":\"Senha alterada com sucesso!\"}");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Erro ao alterar senha");
+        }
+    }
+
+    @GetMapping("/obter-usuario-ativo")
+    public ResponseEntity<?> obterUsuarioAtivo() {
+        return ResponseEntity.ok(usuarioService.usuarioAutenticado());
+    }
+
+    @PutMapping("/atualizar-usuario")
     public ResponseEntity<?> atualizaUsuario(@RequestBody UsuarioDTO usuarioDTO) {
         try {
             return ResponseEntity.ok(usuarioService.atualizaUsuario(usuarioDTO));

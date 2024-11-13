@@ -23,7 +23,7 @@ public class TreinoController {
     public ResponseEntity<?> uploadTrainingSchedule(@RequestBody List<HorarioTreinamentoDTO> horarioTreinamentoDTOList) {
         try {
             treinoService.salvarTreino(horarioTreinamentoDTOList);
-            return ResponseEntity.ok("Treino salvo com sucesso!");
+            return ResponseEntity.ok("{\"message\":\"Treino salvo com sucesso!\"}");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }

@@ -60,6 +60,17 @@ public class UsuarioService {
         return new RecoveryJwtTokenDTO(token, funcao, usuarioId);
     }
 
+    public void atualizarSenha(String senhaAtual, String novaSenha) {
+        Usuario usuario = usuarioAutenticado();
+
+        if (!securityConfiguration.passwordEncoder().matches(senhaAtual, usuario.getSenha())) {
+            throw new IllegalArgumentException("Senha atual incorreta");
+        }
+
+        usuario.setSenha(securityConfiguration.passwordEncoder().encode(novaSenha));
+        usuarioRepository.save(usuario);
+    }
+
     public Usuario save(UsuarioDTO usuarioDTO) {
         Usuario usuario;
 
@@ -114,6 +125,12 @@ public class UsuarioService {
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
     }
 
+    public Usuario alterarUsuario() {
+        String email = AuthenticatedUserUtil.getAuthenticatedUsername();
+        return usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+    }
+
     public Usuario adicionarClubeAoUsuario(Long usuarioId, String codigoClube) {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado"));
@@ -147,9 +164,6 @@ public class UsuarioService {
 
         usuario.setEmail(usuarioDTO.email());
         usuario.setNome(usuarioDTO.nome());
-        usuario.setSenha(securityConfiguration.passwordEncoder().encode(usuarioDTO.senha()));
-
-        usuario.setFuncao(usuarioDTO.funcao());
 
         return usuarioRepository.save(usuario);
     }
