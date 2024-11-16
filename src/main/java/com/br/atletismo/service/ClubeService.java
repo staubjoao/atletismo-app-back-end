@@ -137,6 +137,10 @@ public class ClubeService {
         Usuario usuario = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
+        if (usuario.getClubes().contains(clube)) {
+            usuario.getClubes().remove(clube);
+        }
+
         usuario.getClubes().add(clube);
         clube.addUsuario(usuario);
 
